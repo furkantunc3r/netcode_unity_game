@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Oddworm.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -19,31 +20,21 @@ public class NetworkingPanel : MonoBehaviour
         StartAsClientButton.onClick.AddListener(OnClick_StartAsClientButton);
         StartAsHostButton.onClick.AddListener(OnClick_StartAsHostButton);
         StartAsServerButton.onClick.AddListener(OnClick_StartAsServerButton);
-
-
-
     }
 
+   
     public void OnClick_StartAsServerButton()
     {
        NetworkManager.Singleton.StartServer();
-
     }
 
     public void OnClick_StartAsClientButton()
     {
-
        NetworkManager.Singleton.StartClient();
-       
-        
-
     }
     public void OnClick_StartAsHostButton()
     {
         NetworkManager.Singleton.StartHost();
-
-
-
     }
 
 
