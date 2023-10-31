@@ -1,4 +1,5 @@
-﻿using Unity.Netcode;
+﻿using Cinemachine;
+using Unity.Netcode;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
@@ -107,6 +108,8 @@ namespace StarterAssets
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
+        private CinemachineVirtualCamera _cinemachineVirtualCamera;
+
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
@@ -131,6 +134,11 @@ namespace StarterAssets
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
+
+            if (_cinemachineVirtualCamera == null)
+            {
+                _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+            }
         }
 
         private void Start()
@@ -140,11 +148,11 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
-#if ENABLE_INPUT_SYSTEM 
-            _playerInput = GetComponent<PlayerInput>();
-#else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
-#endif
+//#if ENABLE_INPUT_SYSTEM 
+//            _playerInput = GetComponent<PlayerInput>();
+//#else
+//			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
+//#endif
 
             AssignAnimationIDs();
 
@@ -153,32 +161,63 @@ namespace StarterAssets
             _fallTimeoutDelta = FallTimeout;
         }
 
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+
+            if (IsClient && IsOwner)
+            {
+                _playerInput = GetComponent<PlayerInput>();
+                _playerInput.enabled = true;
+                _cinemachineVirtualCamera.Follow = gameObject.transform.GetChild(0);
+            }
+        }
+
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
 
-            JumpAndGravity();
-            GroundedCheck();
+            //jumpandgravity();
+            //groundedcheck();
 
             if (IsServer && IsLocalPlayer)
             {
-                Move(_input.move);
+                Move(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y);
 
+                JumpAndGravity(_input.jump);
+
+                GroundedCheck();
             }
             else if (IsClient && IsLocalPlayer)
             {
-                Debug.Log("bu vektörü gönderdim: " + _input.move);
-                MoveServerRpc(_input.move);
+                //Debug.Log("bu vektörü gönderdim: " + _input.move);
+                MoveServerRpc(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y);
+
+                //Debug.Log("Sent this: " + _input.jump);
+                JumpServerRpc(_input.jump);
+                _input.jump = false;
+
+                GroundedServerRpc();        
             }
           
         }
+
         [ServerRpc]
-        private void MoveServerRpc(Vector2 inputVector)
+        private void MoveServerRpc(Vector2 inputVector, float rotation)
         {
+            Move(inputVector, rotation);
+        }
 
-            Move(inputVector);
+        [ServerRpc]
+        private void JumpServerRpc(bool jumpState)
+        {
+            JumpAndGravity(jumpState);
+        }
 
-
+        [ServerRpc]
+        private void GroundedServerRpc()
+        {
+            GroundedCheck();
         }
 
         private void LateUpdate()
@@ -231,11 +270,11 @@ namespace StarterAssets
                 _cinemachineTargetYaw, 0.0f);
         }
 
-        private void Move(Vector2 move)
+        private void Move(Vector2 move, float _rotation)
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
 
-            Debug.Log("Serverimiza gelen değer :"+ move);
+            //Debug.Log("Serverimiza gelen değer :"+ move);
 
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
@@ -279,7 +318,9 @@ namespace StarterAssets
             if (move != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                  _mainCamera.transform.eulerAngles.y;
+                                    _rotation;
+                                    //_cinemachineVirtualCamera.transform.eulerAngles.y;
+                                    //_mainCamera.transform.eulerAngles.y;
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
 
@@ -302,7 +343,7 @@ namespace StarterAssets
             }
         }
 
-        private void JumpAndGravity()
+        private void JumpAndGravity(bool jumpState)
         {
             if (Grounded)
             {
@@ -323,7 +364,7 @@ namespace StarterAssets
                 }
 
                 // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                if (jumpState && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
