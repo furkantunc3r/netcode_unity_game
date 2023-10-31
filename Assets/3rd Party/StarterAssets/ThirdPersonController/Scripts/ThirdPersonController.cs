@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
@@ -108,6 +109,8 @@ namespace StarterAssets
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
+        //private NetworkAnimator _networkAnimator;
+
         private CinemachineVirtualCamera _cinemachineVirtualCamera;
 
         private const float _threshold = 0.01f;
@@ -129,6 +132,9 @@ namespace StarterAssets
 
         private void Awake()
         {
+            //_networkAnimator = GetComponent<NetworkAnimator>();
+            //_networkAnimator.
+
             // get a reference to our main camera
             if (_mainCamera == null)
             {
@@ -173,6 +179,34 @@ namespace StarterAssets
             }
         }
 
+        //private void FixedUpdate()
+        //{
+        //    _hasAnimator = TryGetComponent(out _animator);
+
+        //    //jumpandgravity();
+        //    //groundedcheck();
+
+        //    if (IsServer && IsLocalPlayer)
+        //    {
+        //        Move(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
+
+        //        JumpAndGravity(_input.jump);
+
+        //        GroundedCheck();
+        //    }
+        //    else if (IsClient && IsLocalPlayer)
+        //    {
+        //        //Debug.Log("bu vektörü gönderdim: " + _input.move);
+        //        MoveServerRpc(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
+
+        //        //Debug.Log("Sent this: " + _input.jump);
+        //        JumpServerRpc(_input.jump);
+        //        _input.jump = false;
+
+        //        GroundedServerRpc();
+        //    }
+        //}
+
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
@@ -182,7 +216,7 @@ namespace StarterAssets
 
             if (IsServer && IsLocalPlayer)
             {
-                Move(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y);
+                Move(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
 
                 JumpAndGravity(_input.jump);
 
@@ -191,21 +225,21 @@ namespace StarterAssets
             else if (IsClient && IsLocalPlayer)
             {
                 //Debug.Log("bu vektörü gönderdim: " + _input.move);
-                MoveServerRpc(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y);
+                MoveServerRpc(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
 
                 //Debug.Log("Sent this: " + _input.jump);
                 JumpServerRpc(_input.jump);
                 _input.jump = false;
 
-                GroundedServerRpc();        
+                GroundedServerRpc();
             }
-          
+
         }
 
         [ServerRpc]
-        private void MoveServerRpc(Vector2 inputVector, float rotation)
+        private void MoveServerRpc(Vector2 inputVector, float rotation, bool sprint)
         {
-            Move(inputVector, rotation);
+            Move(inputVector, rotation, sprint);
         }
 
         [ServerRpc]
@@ -270,13 +304,13 @@ namespace StarterAssets
                 _cinemachineTargetYaw, 0.0f);
         }
 
-        private void Move(Vector2 move, float _rotation)
+        private void Move(Vector2 move, float _rotation, bool _sprint)
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
 
             //Debug.Log("Serverimiza gelen değer :"+ move);
 
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = _sprint ? SprintSpeed : MoveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -287,7 +321,7 @@ namespace StarterAssets
             // a reference to the players current horizontal velocity
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
-            float speedOffset = 0.1f;
+            float speedOffset = 100f;
             float inputMagnitude = _input.analogMovement ? move.magnitude : 1f;
 
             // accelerate or decelerate to target speed

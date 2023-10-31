@@ -656,8 +656,8 @@ GameObject:
   - component: {fileID: 7358789993801778542}
   - component: {fileID: 8639162051663492154}
   - component: {fileID: 4429273681893477873}
-  - component: {fileID: 5884677327610786600}
   - component: {fileID: 8890438283326192194}
+  - component: {fileID: 4599857467968181386}
   m_Layer: 6
   m_Name: PlayerArmature
   m_TagString: Player
@@ -742,7 +742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 10
+  MoveSpeed: 2
   SprintSpeed: 5.335
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
@@ -958,7 +958,19 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &5884677327610786600
+--- !u!114 &8890438283326192194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3104374857466842660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e39cfa46dcdf7b4e8967721a0fab525, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4599857467968181386
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -972,18 +984,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 5686709094570892829}
---- !u!114 &8890438283326192194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3104374857466842660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e39cfa46dcdf7b4e8967721a0fab525, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3272560965828716956
 GameObject:
   m_ObjectHideFlags: 0
