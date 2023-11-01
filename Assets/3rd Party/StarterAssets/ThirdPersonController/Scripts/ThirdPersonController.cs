@@ -179,61 +179,28 @@ namespace StarterAssets
             }
         }
 
-        //private void FixedUpdate()
-        //{
-        //    _hasAnimator = TryGetComponent(out _animator);
-
-        //    //jumpandgravity();
-        //    //groundedcheck();
-
-        //    if (IsServer && IsLocalPlayer)
-        //    {
-        //        Move(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
-
-        //        JumpAndGravity(_input.jump);
-
-        //        GroundedCheck();
-        //    }
-        //    else if (IsClient && IsLocalPlayer)
-        //    {
-        //        //Debug.Log("bu vektörü gönderdim: " + _input.move);
-        //        MoveServerRpc(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
-
-        //        //Debug.Log("Sent this: " + _input.jump);
-        //        JumpServerRpc(_input.jump);
-        //        _input.jump = false;
-
-        //        GroundedServerRpc();
-        //    }
-        //}
-
         private void Update()
         {
-            _hasAnimator = TryGetComponent(out _animator);
-
-            //jumpandgravity();
-            //groundedcheck();
-
             if (IsServer && IsLocalPlayer)
             {
-                Move(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
+                GroundedCheck();
 
                 JumpAndGravity(_input.jump);
 
-                GroundedCheck();
+                Move(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
             }
             else if (IsClient && IsLocalPlayer)
             {
-                //Debug.Log("bu vektörü gönderdim: " + _input.move);
-                MoveServerRpc(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
+                GroundedServerRpc();
 
                 //Debug.Log("Sent this: " + _input.jump);
                 JumpServerRpc(_input.jump);
                 _input.jump = false;
 
-                GroundedServerRpc();
-            }
+                //Debug.Log("bu vektörü gönderdim: " + _input.move);
+                MoveServerRpc(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
 
+            }
         }
 
         [ServerRpc]
