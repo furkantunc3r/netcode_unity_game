@@ -24,23 +24,23 @@ public class BuildAndRun : EditorWindow
 
         GUILayout.Space(20);
 
-        if (GUILayout.Button("Build and Run!"))
+        if (GUILayout.Button("Build and Run"))
         {
             BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, "D:/Unity/Projects/Builds/MultiplayerGame/MultiplayerGame.exe", BuildTarget.StandaloneWindows, BuildOptions.None);
             System.Diagnostics.Process.Start("CMD.exe", $"/C {path} {serverCount} {clientCount}");
             this.Close();
         }
-        else if (GUILayout.Button("Only Build!"))
+        else if (GUILayout.Button("Only Build"))
         {
             BuildPipeline.BuildPlayer(EditorBuildSettings.scenes, "D:/Unity/Projects/Builds/MultiplayerGame/MultiplayerGame.exe", BuildTarget.StandaloneWindows, BuildOptions.None);
             this.Close();
         }
-        else if (GUILayout.Button("Only Run!"))
+        else if (GUILayout.Button("Only Run"))
         {
             System.Diagnostics.Process.Start("CMD.exe", $"/C {path} {serverCount} {clientCount}");
             this.Close();
         }
-        else if (GUILayout.Button("Cancel!"))
+        else if (GUILayout.Button("Cancel"))
         {
             this.Close();
         }
