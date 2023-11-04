@@ -659,7 +659,7 @@ GameObject:
   - component: {fileID: 8890438283326192194}
   - component: {fileID: 4599857467968181386}
   m_Layer: 6
-  m_Name: PlayerArmature
+  m_Name: NetworkPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

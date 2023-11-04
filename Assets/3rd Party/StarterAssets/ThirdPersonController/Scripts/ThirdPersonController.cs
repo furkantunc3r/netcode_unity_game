@@ -179,25 +179,17 @@ namespace StarterAssets
             }
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            if (IsServer && IsLocalPlayer)
-            {
-                GroundedCheck();
-
-                JumpAndGravity(_input.jump);
-
-                Move(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
-            }
-            else if (IsClient && IsLocalPlayer)
+            if (IsClient && IsLocalPlayer)
             {
                 GroundedServerRpc();
 
-                //Debug.Log("Sent this: " + _input.jump);
+            
                 JumpServerRpc(_input.jump);
                 _input.jump = false;
 
-                //Debug.Log("bu vektörü gönderdim: " + _input.move);
+                
                 MoveServerRpc(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
 
             }

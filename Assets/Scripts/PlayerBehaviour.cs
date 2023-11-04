@@ -16,14 +16,10 @@ public class PlayerBehaviour : NetworkBehaviour
         if (IsClient && IsLocalPlayer)
         {
             PlayerInput.enabled = true;
-
-            Debug.Log("Hello World");
-
         }
         else if (IsClient && !IsLocalPlayer)
         {
             PlayerInput.enabled=false;
-
         }
     }
 

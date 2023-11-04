@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Unity.Netcode;
 
-public class CoinMovement : MonoBehaviour
+public class CoinMovement : NetworkBehaviour
 {
-
-    private void Start()
+    public override void OnNetworkSpawn()
     {
-        //TODO : SetEase eklenecek ve SetLoops açıklanacak.
-        transform.DOLocalMoveY(1.5f, 1f).SetLoops(-1,LoopType.Yoyo);
+        base.OnNetworkSpawn();
+        transform.DOLocalMoveY(1.5f, 1f).SetLoops(-1, LoopType.Yoyo);
     }
-
-
-
 }
