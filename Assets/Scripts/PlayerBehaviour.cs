@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerBehaviour : NetworkBehaviour
 {
     private PlayerInput PlayerInput;
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -22,6 +23,4 @@ public class PlayerBehaviour : NetworkBehaviour
             PlayerInput.enabled=false;
         }
     }
-
-
 }

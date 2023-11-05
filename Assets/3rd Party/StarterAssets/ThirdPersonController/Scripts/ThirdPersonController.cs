@@ -445,5 +445,13 @@ namespace StarterAssets
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
         }
+
+        [ContextMenu("TakeDamage")]
+        public void takeDamage()
+        {
+            if (!IsServer) return;
+            
+            GetComponent<NetworkedHealth>()._health.Value -= 20;
+        }
     }
 }
