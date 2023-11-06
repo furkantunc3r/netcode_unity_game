@@ -12,8 +12,10 @@ public class CoinGenerator : NetworkBehaviour
     [SerializeField]
     private Transform coinPrefab;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+
         NetworkManager.Singleton.OnServerStarted += SpawnCoin;
     }
 
