@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +9,8 @@ public class PlayerUI : NetworkBehaviour
 {
     [SerializeField] RectTransform healthUI;
 
+    [SerializeField] RectTransform healthCanvas;
+
     private Camera _cam;
 
     private void Start()
@@ -17,9 +20,7 @@ public class PlayerUI : NetworkBehaviour
 
     private void Update()
     {
-        if (!IsOwner) return;
-
-        healthUI.rotation = Quaternion.LookRotation(healthUI.position - _cam.transform.position);
+        healthCanvas.transform.rotation = _cam.transform.rotation;
     }
 
     private void OnEnable()

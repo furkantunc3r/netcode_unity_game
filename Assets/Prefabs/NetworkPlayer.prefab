@@ -734,7 +734,7 @@ GameObject:
   - component: {fileID: 8890438283326192194}
   - component: {fileID: 4599857467968181386}
   - component: {fileID: 9036609165206349631}
-  - component: {fileID: -1808843342879099332}
+  - component: {fileID: 978932853205257153}
   m_Layer: 6
   m_Name: NetworkPlayer
   m_TagString: Player
@@ -1076,7 +1076,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health:
     m_InternalValue: 0
---- !u!114 &-1808843342879099332
+--- !u!114 &978932853205257153
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1089,6 +1089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthUI: {fileID: 3668023905390121660}
+  healthCanvas: {fileID: 4535083403006970116}
 --- !u!1 &3272560965828716956
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,12 +13,10 @@ public class CommandLineScript : MonoBehaviour
        
         if (!startAs)
         {
-            Debug.Log("test");
             NetworkManager.Singleton.StartServer();
         }
         else if (startAs)
         {
-            Debug.Log("test1");
             NetworkManager.Singleton.StartClient();
         }
     }
