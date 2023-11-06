@@ -1,6 +1,7 @@
 using UnityEngine;
 using Oddworm.Framework;
 using Unity.Netcode;
+using System.IO;
 
 public class CommandLineScript : MonoBehaviour
 {
@@ -12,10 +13,12 @@ public class CommandLineScript : MonoBehaviour
        
         if (!startAs)
         {
+            Debug.Log("test");
             NetworkManager.Singleton.StartServer();
         }
         else if (startAs)
         {
+            Debug.Log("test1");
             NetworkManager.Singleton.StartClient();
         }
     }
