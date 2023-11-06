@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerUI : NetworkBehaviour
 {
@@ -35,5 +36,10 @@ public class PlayerUI : NetworkBehaviour
     private void healthChanged(int previousValue, int newValue)
     {
         healthUI.transform.localScale = new Vector3(newValue / 100f, 1, 1);
+        
+        if (newValue <= 80)
+            healthUI.GetChild(0).GetComponent<Image>().color = Color.yellow;
+        else if (newValue <= 40)
+            healthUI.GetChild(0).GetComponent<Image>().color = Color.red;
     }
 }
