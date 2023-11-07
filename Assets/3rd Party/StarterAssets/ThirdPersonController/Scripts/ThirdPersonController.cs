@@ -233,9 +233,17 @@ namespace StarterAssets
         }
 
         [ServerRpc]
-        public void ShootServerRpc()
+        private void ShootServerRpc()
         {
             Shoot();
+        }
+
+        public void DummyShoot()
+        {
+            if (IsClient && IsLocalPlayer)
+            {
+                ShootServerRpc();
+            }
         }
 
 
