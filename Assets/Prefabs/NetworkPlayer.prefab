@@ -946,8 +946,8 @@ MonoBehaviour:
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
-  arrowPrefab: {fileID: 8302627814681764304, guid: 5187dfa4d8f19524e8bbf7c6894b7de7, type: 3}
-  arrowPoint: {fileID: 1655164705728975754}
+  arrowPrefab: {fileID: 2463074956011265839, guid: 802986766a97b4a108b97eb5fdf6e02f, type: 3}
+  arrowPoint: {fileID: 6145808313560533265}
 --- !u!114 &3851213774463365351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2923,5 +2923,10 @@ PrefabInstance:
 --- !u!4 &647552647136869177 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: faa35380cd87f354fa1461e205af5956, type: 3}
+  m_PrefabInstance: {fileID: 1114122826795293906}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6145808313560533265 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6502182839619065283, guid: faa35380cd87f354fa1461e205af5956, type: 3}
   m_PrefabInstance: {fileID: 1114122826795293906}
   m_PrefabAsset: {fileID: 0}

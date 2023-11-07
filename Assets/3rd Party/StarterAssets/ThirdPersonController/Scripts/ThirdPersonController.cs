@@ -276,8 +276,8 @@ namespace StarterAssets
 
         private void Shoot()
         {            
-            NetworkObject arrow = Instantiate(arrowPrefab, arrowPoint.position, new Quaternion(90, 0, 0, 0));
-            arrow.Spawn();
+            NetworkObject arrow = Instantiate(arrowPrefab, arrowPoint.position, transform.rotation);
+            arrow.Spawn(true);
             arrow.GetComponent<Rigidbody>().AddForce(transform.forward * 25f, ForceMode.Impulse);
         }
 
