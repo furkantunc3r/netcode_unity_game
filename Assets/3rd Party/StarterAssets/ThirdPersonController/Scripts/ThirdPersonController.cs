@@ -113,6 +113,11 @@ namespace StarterAssets
 
         private CinemachineVirtualCamera _cinemachineVirtualCamera;
 
+        [SerializeField]
+        private NetworkObject arrowPrefab;
+        [SerializeField]
+        private Transform arrowPoint;
+
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
@@ -192,11 +197,13 @@ namespace StarterAssets
                 
                 MoveServerRpc(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
 
-                if (Grounded)
+                if (_input.aim && Grounded && !_input.sprint)
                 {
-                    AimServerRpc(_input.aim);
-                    if (_input.aim)
-                        ShootServerRpc(_input.shoot);
+                    AimServerRpc(_input.aim, _input.shoot);
+                }
+                else
+                {
+                    AimServerRpc(false, false);
                 }
             }
         }
@@ -220,16 +227,17 @@ namespace StarterAssets
         }
 
         [ServerRpc]
-        private void AimServerRpc(bool aimState)
+        private void AimServerRpc(bool aimState, bool shootState)
         {
-            Aim(aimState);
+            Aim(aimState, shootState);
         }
 
         [ServerRpc]
-        public void ShootServerRpc(bool shootState)
+        public void ShootServerRpc()
         {
-            Shoot(shootState);
+            Shoot();
         }
+
 
         private void LateUpdate()
         {
@@ -260,14 +268,17 @@ namespace StarterAssets
             }
         }
 
-        private void Aim(bool aimState)
+        private void Aim(bool aimState, bool shootState)
         {
             _animator.SetBool("Aim", aimState);
+            _animator.SetBool("Shoot", shootState);
         }
 
-        private void Shoot(bool shootState)
-        {
-            _animator.SetBool("Shoot", shootState);
+        private void Shoot()
+        {            
+            NetworkObject arrow = Instantiate(arrowPrefab, arrowPoint.position, new Quaternion(90, 0, 0, 0));
+            arrow.Spawn();
+            arrow.GetComponent<Rigidbody>().AddForce(transform.forward * 25f, ForceMode.Impulse);
         }
 
         private void CameraRotation()
