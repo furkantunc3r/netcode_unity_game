@@ -193,8 +193,11 @@ namespace StarterAssets
                 MoveServerRpc(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
 
                 if (Grounded)
+                {
                     AimServerRpc(_input.aim);
-
+                    if (_input.aim)
+                        ShootServerRpc(_input.shoot);
+                }
             }
         }
 
@@ -220,6 +223,12 @@ namespace StarterAssets
         private void AimServerRpc(bool aimState)
         {
             Aim(aimState);
+        }
+
+        [ServerRpc]
+        public void ShootServerRpc(bool shootState)
+        {
+            Shoot(shootState);
         }
 
         private void LateUpdate()
@@ -254,6 +263,11 @@ namespace StarterAssets
         private void Aim(bool aimState)
         {
             _animator.SetBool("Aim", aimState);
+        }
+
+        private void Shoot(bool shootState)
+        {
+            _animator.SetBool("Shoot", shootState);
         }
 
         private void CameraRotation()

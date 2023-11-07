@@ -2,6 +2,7 @@ using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,11 @@ public class PlayerUI : NetworkBehaviour
     private void Start()
     {
         _cam = Camera.main;
+
+        if (GetComponent<NetworkedHealth>()._health.Value <= 80)
+            healthUI.GetChild(0).GetComponent<Image>().color = Color.yellow;
+        else if (GetComponent<NetworkedHealth>()._health.Value <= 40)
+            healthUI.GetChild(0).GetComponent<Image>().color = Color.red;
     }
 
     private void Update()
