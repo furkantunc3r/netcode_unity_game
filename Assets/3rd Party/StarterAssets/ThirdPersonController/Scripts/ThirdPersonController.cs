@@ -192,6 +192,9 @@ namespace StarterAssets
                 
                 MoveServerRpc(_input.move, gameObject.transform.GetChild(0).transform.eulerAngles.y, _input.sprint);
 
+                if (Grounded)
+                    AimServerRpc(_input.aim);
+
             }
         }
 
@@ -211,6 +214,12 @@ namespace StarterAssets
         private void GroundedServerRpc()
         {
             GroundedCheck();
+        }
+
+        [ServerRpc]
+        private void AimServerRpc(bool aimState)
+        {
+            Aim(aimState);
         }
 
         private void LateUpdate()
@@ -240,6 +249,11 @@ namespace StarterAssets
             {
                 _animator.SetBool(_animIDGrounded, Grounded);
             }
+        }
+
+        private void Aim(bool aimState)
+        {
+            _animator.SetBool("Aim", aimState);
         }
 
         private void CameraRotation()
