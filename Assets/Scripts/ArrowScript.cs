@@ -7,10 +7,13 @@ using UnityEngine;
 
 public class ArrowScript : NetworkBehaviour
 {
+    private NetworkObject m_SpawnedObject;
+
     private void Start()
     {
-        if (IsClient && IsOwner)
-            DestroyServerRpc();
+        m_SpawnedObject = GetComponent<NetworkObject>();
+        if (IsServer)
+            StartCoroutine(DespawnTimer());
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,9 +25,9 @@ public class ArrowScript : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
-    private void DestroyServerRpc()
+    private IEnumerator DespawnTimer()
     {
-        Destroy(gameObject, 20);
+        yield return new WaitForSeconds(20);
+        m_SpawnedObject.Despawn();
     }
 }
