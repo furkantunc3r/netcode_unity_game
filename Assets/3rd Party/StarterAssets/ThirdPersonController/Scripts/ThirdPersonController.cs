@@ -111,7 +111,8 @@ namespace StarterAssets
 
         //private NetworkAnimator _networkAnimator;
 
-        private CinemachineVirtualCamera _cinemachineVirtualCamera;
+        private GameObject playerFollowCamera;
+        private GameObject playerAimCamera;
 
         [SerializeField]
         private NetworkObject arrowPrefab;
@@ -146,9 +147,13 @@ namespace StarterAssets
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
 
-            if (_cinemachineVirtualCamera == null)
+            if (playerFollowCamera == null)
             {
-                _cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+                playerFollowCamera = GameObject.Find("PlayerFollowCamera");
+            }
+            if (playerAimCamera == null)
+            {
+                playerAimCamera = GameObject.Find("PlayerAimCamera");
             }
         }
 
@@ -180,7 +185,8 @@ namespace StarterAssets
             {
                 _playerInput = GetComponent<PlayerInput>();
                 _playerInput.enabled = true;
-                _cinemachineVirtualCamera.Follow = gameObject.transform.GetChild(0);
+                playerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = gameObject.transform.GetChild(0);
+                playerAimCamera.GetComponent<CinemachineVirtualCamera>().Follow = gameObject.transform.GetChild(0);
             }
         }
 
@@ -199,10 +205,14 @@ namespace StarterAssets
 
                 if (_input.aim && Grounded && !_input.sprint)
                 {
+                    playerFollowCamera.SetActive(false);
+                    playerAimCamera.SetActive(true);
                     AimServerRpc(_input.aim, _input.shoot);
                 }
                 else
                 {
+                    playerFollowCamera.SetActive(true);
+                    playerAimCamera.SetActive(false);
                     AimServerRpc(false, false);
                 }
             }
